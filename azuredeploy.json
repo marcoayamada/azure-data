@@ -3,7 +3,12 @@
     "contentVersion": "1.0.0.0",
 
     "parameters": {
-        "storagePrefix": {
+        "environment": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 11
+        },
+        "containerName": {
             "type": "string",
             "minLength": 3,
             "maxLength": 11
@@ -29,7 +34,7 @@
     },
 
     "variables": {
-        "uniqueStorageName": "[concat(parameters('storagePrefix'), uniqueString(resourceGroup().id))]"
+        "uniqueStorageName": "[concat(parameters('environment'), uniqueString(resourceGroup().id))]"
     },
 
 
@@ -45,7 +50,29 @@
             "kind": "StorageV2",
             "properties": {
                 "supportsHttpsTrafficOnly": true
-            }
+            },
+            "resources": [
+                {
+                    "type": "blobServices",
+                    "apiVersion": "2021-01-01",
+                    "name": "default",
+                    "dependsOn": [
+                        "[variables('uniqueStorageName')]"
+                    ],
+                    "properties": {},
+                    "resources": [
+                        {
+                            "type": "containers",
+                            "apiVersion": "2021-01-01",
+                            "name": "[concat(parameters('environment'), '-', parameters('containerName') )]",
+                            "dependsOn": [
+                                "default"
+                            ],
+                            "properties": {}
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
