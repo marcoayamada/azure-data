@@ -4,7 +4,7 @@ on: [push]
 
 env:
   AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}   # set this to your Azure Subscription Id
-  AZURE_RESOURCE_GROUP: myResourceGroupDev   # set this to your target resource group
+  AZURE_RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}   # set this to your target resource group
 
 jobs:
   deploy-virtual-network-template:
